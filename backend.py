@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import tensorflow as tf
 
-
 app = FastAPI()
 
 @app.get("/")
