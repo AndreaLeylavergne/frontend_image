@@ -9,4 +9,4 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"Greeting": "Hello, Beautiful World!"}
+    return {"Greeting": "Hello, World!"}
