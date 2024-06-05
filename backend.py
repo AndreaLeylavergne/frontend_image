@@ -5,9 +5,12 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 import cv2
+import base64
+import io
+import os
 
 app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"Greeting": "Hello, dear World!"}
+    return {"Greeting": "Hello, World!"}
