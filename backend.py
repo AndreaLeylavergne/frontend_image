@@ -8,9 +8,11 @@ import cv2
 import base64
 import io
 import os
+import random
+import logging
 
 app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"Greeting": "Hello, World!"}
+    return {"Greeting": "Hello, lovely World!"}
