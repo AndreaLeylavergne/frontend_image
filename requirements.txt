@@ -2,5 +2,12 @@ tensorflow==2.15.0
 fastapi==0.111.0
 uvicorn
 numpy
-opencv-python
+opencv-python==4.9.0.80
 gunicorn
+numpy
+tqdm
+keras>=2.3.0
+imageio>=2.5.0
+streamlit
+Pillow
+ipython
