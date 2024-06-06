@@ -11,7 +11,24 @@ import os
 import random
 import logging
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
+# Load the model
+
+
+# Paths of images and annotated masks
+images_paths = {
+    "image1": "dataset/images_prepped/val/0000FT_000294.png",
+    "image2": "dataset/images_prepped/val/0000FT_000576.png",
+    "image3": "dataset/images_prepped/val/0000FT_001016.png"
+}
+
+annotated_masks_paths = {
+    "image1": "dataset/annotations_prepped_grouped/val/0000FT_000294.png",
+    "image2": "dataset/annotations_prepped_grouped/val/0000FT_000576.png",
+    "image3": "dataset/annotations_prepped_grouped/val/0000FT_001016.png"
+}
 app = FastAPI()
 
 class ImageID(BaseModel):
