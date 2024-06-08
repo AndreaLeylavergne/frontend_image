@@ -257,4 +257,4 @@ async def evaluate_masks(data: dict):
 
 @app.get("/")
 def root():
-    return {"Greeting": "Hello, loved World!"}
+    return {"Greeting": "Hello, dear World!"}
