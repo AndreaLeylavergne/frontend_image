@@ -1,1 +1,0 @@
-web: python3 -m fastapi run --host=0.0.0.0 --port=$PORT
