@@ -10,28 +10,22 @@ import io
 import os
 import random
 import logging
-from azure.storage.blob import BlobServiceClient
+import requests 
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-connect_str = "AZURE_STORAGE_CONNECTION_STRING"
-container_name = "blobstorage224"
-blob_name = "pretrainedmodels"
-local_model_path = "vgg_unet"
+# URL du fichier H5 public
+url = "https://blobstorage224.blob.core.windows.net/pretrainedmodels/vgg_unet.h5?sp=r&st=2024-06-13T07:04:12Z&se=2024-06-13T15:04:12Z&spr=https&sv=2022-11-02&sr=b&sig=LnkZyXWL8u4x2SDN6ZNp%2BxR7ckw3NvuU1xrw2H1T82I%3D"
 
-# Load the model from Azure Blob Storage
-def download_model():
-    if not os.path.exists(local_model_path):
-        blob_service_client = BlobServiceClient.from_connection_string(connect_str)
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        
-        with open(local_model_path, "wb") as download_file:
-            download_file.write(blob_client.download_blob().readall())
+# Télécharger le fichier
+local_file_name = "vgg_unet.h5"
+response = requests.get(url)
+with open(local_file_name, "wb") as file:
+    file.write(response.content)
 
-# Load model
-download_model()
-model = tf.keras.models.load_model(local_model_path)
+# Charger le modèle avec TensorFlow
+model = tf.keras.models.load_model(local_file_name)
 
 # Paths of images and annotated masks
 images_paths = {
