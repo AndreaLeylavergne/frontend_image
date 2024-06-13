@@ -7,3 +7,4 @@ gunicorn
 numpy
 Pillow
 azure-storage-blob
+aiohttp==3.9.5
