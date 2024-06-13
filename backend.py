@@ -10,22 +10,35 @@ import io
 import os
 import random
 import logging
-import requests 
+import aiohttp
+from contextlib import asynccontextmanager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
+app = FastAPI()
+
 # URL du fichier H5 public
-url = "https://blobstorage224.blob.core.windows.net/pretrainedmodels/vgg_unet.h5?sp=r&st=2024-06-13T07:04:12Z&se=2024-06-13T15:04:12Z&spr=https&sv=2022-11-02&sr=b&sig=LnkZyXWL8u4x2SDN6ZNp%2BxR7ckw3NvuU1xrw2H1T82I%3D"
+url = "https://blobstorage224.blob.core.windows.net/pretrainedmodels/vgg_unet.h5?sp=r&st=2024-06-13T08:01:05Z&se=2024-06-19T16:01:05Z&spr=https&sv=2022-11-02&sr=b&sig=7TQ2FYQYlX2y1hcXU5haR1XdXCK6hT2FWvWwdrd1ikk%3D"
 
-# Télécharger le fichier
-local_file_name = "vgg_unet.h5"
-response = requests.get(url)
-with open(local_file_name, "wb") as file:
-    file.write(response.content)
-
-# Charger le modèle avec TensorFlow
-model = tf.keras.models.load_model(local_file_name)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model
+    local_file_name = "vgg_unet.h5"
+    
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status != 200:
+                raise Exception("Failed to download model file")
+            with open(local_file_name, "wb") as file:
+                file.write(await response.read())
+    
+    model = tf.keras.models.load_model(local_file_name)
+    logging.info("Model loaded successfully")
+    yield
+    
+# Using the lifespan function in the FastAPI app
+app = FastAPI(lifespan=lifespan)
 
 # Paths of images and annotated masks
 images_paths = {
@@ -39,7 +52,6 @@ annotated_masks_paths = {
     "image2": "dataset/annotations_prepped_grouped/val/0000FT_000576.png",
     "image3": "dataset/annotations_prepped_grouped/val/0000FT_001016.png"
 }
-app = FastAPI()
 
 class ImageID(BaseModel):
     image_id: str
@@ -251,4 +263,4 @@ async def evaluate_masks(data: dict):
 
 @app.get("/")
 def root():
-    return {"Greeting": "Hello, dear World!"}
+    return {"Greeting": "Hello, World!"}
