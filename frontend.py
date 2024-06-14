@@ -13,7 +13,7 @@ image_id = st.selectbox(
 )
 
 if st.button('Prédire'):
-    response = requests.post("http://127.0.0.1:8000/predict/", json={"image_id": image_id})
+    response = requests.post("https://backendkeras.azurewebsites.net/predict/", json={"image_id": image_id})
     if response.status_code == 200:
         result = response.json()
         annotated_mask = Image.open(io.BytesIO(base64.b64decode(result["annotated_mask"].split(",")[1])))
@@ -29,7 +29,7 @@ if st.button('Prédire'):
 
 if st.button('Évaluer'):
     if "annotated_mask" in st.session_state and "predicted_mask" in st.session_state:
-        response = requests.post("http://127.0.0.1:8000/evaluate/", json={
+        response = requests.post("https://backendkeras.azurewebsites.net/evaluate/", json={
             "annotated_mask": st.session_state.annotated_mask,
             "predicted_mask": st.session_state.predicted_mask
         })
